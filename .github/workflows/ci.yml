@@ -109,7 +109,7 @@ jobs:
       - name: Set tags
         id: version
         run: |
-          if [ ${{ steps.info.outputs.version }} != *"SNAPSHOT"* ]
+          if [ !endsWith(steps.info.outputs.version, '-SNAPSHOT') ]
           then
             echo "::set-output name=latestTag::'latest'"
           fi
@@ -125,7 +125,7 @@ jobs:
           # We use raw because our release process is not done on tag push (yet)
           tags: |
             type=raw,value=${{ steps.info.outputs.version }}
-            type=raw,value=${{ steps.info.version.latestTag }},enable=${{ !endsWith(steps.info.outputs.version, '-SNAPSHOT') }}
+            type=raw,value=${{ steps.version.outputs.latestTag }},enable=${{ !endsWith(steps.info.outputs.version, '-SNAPSHOT') }}
           labels: |
             org.opencontainers.image.title=siembol-${{ matrix.component }}
       - name: Build and export Docker image
@@ -184,7 +184,7 @@ jobs:
       - name: Set tags
         id: version
         run: |
-          if [ ${{ steps.info.outputs.version }} != *"SNAPSHOT"* ]
+          if [ !endsWith(steps.info.outputs.version, '-SNAPSHOT') ]
           then
             echo "::set-output name=latestTag::'latest'"
           fi
@@ -200,7 +200,7 @@ jobs:
           # We use raw because our release process is not done on tag push (yet)
           tags: |
             type=raw,value=${{ steps.info.outputs.version }}
-            type=raw,value=${{ steps.info.version.latestTag }},enable=${{ !endsWith(steps.info.outputs.version, '-SNAPSHOT') }}
+            type=raw,value=${{ steps.version.outputs.latestTag }},enable=${{ !endsWith(steps.info.outputs.version, '-SNAPSHOT') }}
           labels: |
             org.opencontainers.image.title=siembol-${{ matrix.component }}
       - name: Build and export Docker image
