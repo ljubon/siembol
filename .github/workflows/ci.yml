@@ -106,12 +106,14 @@ jobs:
           echo "::set-output name=version::$($xml.project.parent.version)"
           echo "::set-output name=class::$($xml.project.build.plugins.plugin.executions.execution.configuration.transformers.transformer.mainClass)"
         shell: pwsh
-      - name: Set tags
+      - name: Set latest tags
         id: version
         run: |
-          if [ ${{ !endsWith(steps.info.outputs.version, '-SNAPSHOT') }} ]
+          if [ ${{ endsWith(steps.info.outputs.version, '-SNAPSHOT') }} ]
           then
-            echo "::set-output name=latestTag::'latest'"
+            echo "::set-output name=latestTag::snapshot"
+          else
+            echo "::set-output name=latestTag::latest"
           fi
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -121,11 +123,11 @@ jobs:
         with:
           images: gresearchdev/siembol-${{ matrix.component }}
           flavor: |
-            latest=${{ github.ref == 'refs/heads/master' }}
+            latest=false
           # We use raw because our release process is not done on tag push (yet)
           tags: |
             type=raw,value=${{ steps.info.outputs.version }}
-            type=raw,value=${{ steps.version.outputs.latestTag }},enable=${{ !endsWith(steps.info.outputs.version, '-SNAPSHOT') }}
+            type=raw,value=${{ steps.version.outputs.latestTag }}
           labels: |
             org.opencontainers.image.title=siembol-${{ matrix.component }}
       - name: Build and export Docker image
@@ -181,12 +183,14 @@ jobs:
           [xml]$xml = Get-Content ./*/${{ matrix.component}}/pom.xml
           echo "::set-output name=version::$($xml.project.parent.version)"
         shell: pwsh
-      - name: Set tags
+      - name: Set latest tags
         id: version
         run: |
-          if [ ${{ !endsWith(steps.info.outputs.version, '-SNAPSHOT') }} ]
+          if [ ${{ endsWith(steps.info.outputs.version, '-SNAPSHOT') }} ]
           then
-            echo "::set-output name=latestTag::'latest'"
+            echo "::set-output name=latestTag::snapshot"
+          else
+            echo "::set-output name=latestTag::latest"
           fi
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -200,7 +204,7 @@ jobs:
           # We use raw because our release process is not done on tag push (yet)
           tags: |
             type=raw,value=${{ steps.info.outputs.version }}
-            type=raw,value=${{ steps.version.outputs.latestTag }},enable=${{ !endsWith(steps.info.outputs.version, '-SNAPSHOT') }}
+            type=raw,value=${{ steps.version.outputs.latestTag }}
           labels: |
             org.opencontainers.image.title=siembol-${{ matrix.component }}
       - name: Build and export Docker image
@@ -279,15 +283,15 @@ jobs:
           path: deployment/docker/config-editor-ui
       - name: Get version
         id: info
-        run: echo "::set-output name=version::$(jq -r .appVersion deployment/docker/config-editor-ui/assets/build-info.json)"
+        run: echo "::set-output name=info::$(jq -r .appVersion deployment/docker/config-editor-ui/assets/build-info.json)"
       - name: Set tags
         id: version
         run: |
-          if [ ${{ steps.info.outputs.version }} != *"dev"* ]
+          if [ ${{ endsWith(steps.info.outputs.info, '-dev') }} ]
           then
-            echo "::set-output name=latestTag::'latest'"
+            echo "::set-output name=latestTag::snapshot"
           else
-            echo "::set-output name=latestTag::'SNAPSHOT'"
+            echo "::set-output name=latestTag::latest"
           fi
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -300,8 +304,8 @@ jobs:
             latest=${{ github.ref == 'refs/heads/master' }}
           # We use raw because our release process is not done on tag push (yet)
           tags: |
-            type=raw,value=${{ steps.info.outputs.version }}
-            type=raw,value=${{ steps.info.version.latestTag }},enable=${{ !endsWith(steps.info.outputs.version, '-dev') }}
+            type=raw,value=${{ steps.info.outputs.info }} 
+            type=raw,value=${{ steps.version.outputs.latestTag }}
           labels: |
             org.opencontainers.image.title=siembol-config-editor-ui
 
