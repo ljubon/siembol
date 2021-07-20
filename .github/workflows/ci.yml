@@ -109,7 +109,7 @@ jobs:
       - name: Set tags
         id: version
         run: |
-          if [ !endsWith(steps.info.outputs.version, '-SNAPSHOT') ]
+          if [ ${{ !endsWith(steps.info.outputs.version, '-SNAPSHOT') }} ]
           then
             echo "::set-output name=latestTag::'latest'"
           fi
@@ -184,7 +184,7 @@ jobs:
       - name: Set tags
         id: version
         run: |
-          if [ !endsWith(steps.info.outputs.version, '-SNAPSHOT') ]
+          if [ ${{ !endsWith(steps.info.outputs.version, '-SNAPSHOT') }} ]
           then
             echo "::set-output name=latestTag::'latest'"
           fi
