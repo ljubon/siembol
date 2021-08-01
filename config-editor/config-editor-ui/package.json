@@ -41,7 +41,7 @@
     "ng-block-ui": "^3.0.2",
     "ngx-monaco-editor": "^9.0.0",
     "ngx-popper": "^7.0.0",
-    "ngx-scrollbar": "^7.5.6",
+    "ngx-scrollbar": "^7.6.1",
     "ngx-text-diff": "^0.6.0",
     "oidc-client": "^1.9.1",
     "omit-empty": "^1.0.0",
