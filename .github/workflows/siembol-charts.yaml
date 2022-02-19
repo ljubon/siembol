@@ -48,15 +48,10 @@ jobs:
           REPO_REF: ${GITHUB_REF##*/} # The branch/tag that triggered the workflow
           CurrentChartVersion: "0.1.6" # Chart version set in `Chart.yaml`. Default: `LATEST`
           REPO_CHART: |
-            '{
-              "include": [
-                {
-                  "chart": "siembol",
-                  "src_path": "deployment/helm-k8s/",
-                  "dst_path": "siembol/"
-                }
-              ]
-            }'
+            - include:
+              - chart: "siembol"
+                src_path: deployment/helm-k8s/
+                dst_path: "siembol/"
         run: |
           gh workflow run ${{ env.GH_WORKFLOW }} --repo ${{ env.GH_CHART_REPO }} --ref ${{ env.GH_PAGES_BRANCH }} \
             --field repo=${{ env.REPO }} \
