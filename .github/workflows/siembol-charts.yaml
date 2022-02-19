@@ -46,7 +46,7 @@ jobs:
           GH_PAGES_BRANCH: "WIP-refactor-gh-pages" # gh-pages
           REPO: "ljubon/siembol" # Repository from where we want to build Charts
           REPO_REF: ${GITHUB_REF##*/} # The branch/tag that triggered the workflow
-          CurrentChartVersion: "0.1.5" # Chart version set in `Chart.yaml`. Default: `LATEST`
+          CurrentChartVersion: "0.1.6" # Chart version set in `Chart.yaml`. Default: `LATEST`
           REPO_CHART: |
             '{
               "include": [
