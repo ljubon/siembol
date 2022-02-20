@@ -44,6 +44,18 @@ jobs:
           GH_WORKFLOW: "publish-charts.yaml" # workflow to execute 
           GH_CHART_REPO: "ljubon/charts" # owner/repo where charts are published 
           GH_PAGES_BRANCH: "WIP-refactor-gh-pages" # gh-pages
+          REPO: "ljubon/siembol" # Repository from where we want to build Charts
+          REPO_REF: ${GITHUB_REF##*/} # The branch/tag that triggered the workflow
+          REPO_CHART: |
+            '{
+              "include": [
+                {
+                  "chart": "siembol",
+                  "src_path": "deployment/helm-k8s/",
+                  "dst_path": "siembol/"
+                }
+              ]
+            }'
         run: |
           gh workflow run ${{ env.GH_WORKFLOW }} --repo ${{ env.GH_CHART_REPO }} --ref ${{ env.GH_PAGES_BRANCH }} \
             --field repo=${{ env.REPO }} \
