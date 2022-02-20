@@ -45,7 +45,7 @@ jobs:
           GH_CHART_REPO: "ljubon/charts" # owner/repo where charts are published 
           GH_PAGES_BRANCH: "WIP-refactor-gh-pages" # gh-pages
         run: |
-          gh workflow run ${{ env.GH_WORKFLOW }} \
-          --repo ${{ env.GH_CHART_REPO }} \
-          --ref ${{ env.GH_PAGES_BRANCH }} \
-          --json ./chart.yaml
+          gh workflow run ${{ env.GH_WORKFLOW }} --repo ${{ env.GH_CHART_REPO }} --ref ${{ env.GH_PAGES_BRANCH }} \
+            --field repo=${{ env.REPO }} \
+            --field repo_ref=${{ env.REPO_REF }} \
+            --field repo_chart=${{ env.REPO_CHART }}
