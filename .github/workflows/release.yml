@@ -1,0 +1,13 @@
+name: Release
+
+on: 
+  push:
+    tags: 
+      - 'v*'
+
+jobs:
+  invoke-push:
+    uses: ljubon/charts/.github/workflows/invoke-push.yaml@INTERNAL-master
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }} 
+      APP_PRIVATE_KEY: ${{ secrets.GH_APP_PEM }}
