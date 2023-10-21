@@ -1,0 +1,13 @@
+name: Publish Helm Chart
+
+on: 
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  invoke-push:
+    uses: g-research/charts/.github/workflows/invoke-push.yaml@master
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
