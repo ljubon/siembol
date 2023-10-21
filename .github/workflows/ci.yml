@@ -10,7 +10,7 @@ jobs:
     # Jobs that depend on this one will be skipped too.
     # This prevents duplicate CI runs for our own pull requests, whilst preserving the ability to
     # run the CI for each branch push to a fork, and for each pull request originating from a fork.
-    # if: github.event_name == 'push' || github.event.pull_request.head.repo.id != github.event.pull_request.base.repo.id
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.id != github.event.pull_request.base.repo.id
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,11 +29,8 @@ jobs:
             maven-
 
       - name: Run check style
-        uses: nikitasavinov/checkstyle-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: 'github-pr-check'
-          tool_name: 'checkstyle'
+        continue-on-error: true
+        run: mvn --batch-mode checkstyle:check
       - name: Build and test with Maven
         run: mvn --batch-mode package
       - name: Generate unit test reports
